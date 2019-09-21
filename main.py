@@ -13,7 +13,7 @@ def main():
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CV_CAP_PROP_FRAME_WIDTH, 800)
     cap.set(cv2.CV_CAP_PROP_FRAME_HEIGHT, 480)
-    while (True):
+    while True:
         ret, frame = cap.read()
         face_landmarks_list = face_recognition.face_landmarks(frame)
         for face_landmarks in face_landmarks_list:
