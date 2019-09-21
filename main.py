@@ -9,12 +9,19 @@ def main():
         ret, frame = cap.read()
         face_landmarks_list = face_recognition.face_landmarks(frame)
         for face_landmarks in face_landmarks_list:
+
             chin = face_landmarks['chin']
             chin_line_list = zip(chin[0:-1], chin[1:])
             for chin_line in chin_line_list:
                 cv2.line(frame, chin_line[0], chin_line[1], (0, 255, 0), 5)
-            # face_landmarks['nose_bridge']
+
+            nose_bridge = face_landmarks['nose_bridge']
+            nose_bridge_line_list = zip(nose_bridge[0:-1], nose_bridge[1:])
+            for nose_bridge_line in nose_bridge_line_list:
+                cv2.line(frame, nose_bridge_line[0], nose_bridge_line[1], (255, 255, 0), 5)
+
             # face_landmarks['nose_tip']
+
         cv2.imshow('frame', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
