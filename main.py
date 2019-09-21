@@ -11,8 +11,6 @@ def draw_multiline_line(img, point_list, color, thickness):
 def main():
     cv2.namedWindow("frame")
     cap = cv2.VideoCapture(0)
-    cap.set(cv2.CV_CAP_PROP_FRAME_WIDTH, 800)
-    cap.set(cv2.CV_CAP_PROP_FRAME_HEIGHT, 480)
     while True:
         ret, frame = cap.read()
         face_landmarks_list = face_recognition.face_landmarks(frame)
