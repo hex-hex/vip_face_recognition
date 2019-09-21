@@ -12,7 +12,7 @@ def main():
             chin = face_landmarks['chin']
             chin_line_list = zip(chin[0:-1], chin[1:])
             for chin_line in chin_line_list:
-                cv2.line(frame, chin_line[0], chin_line[1], 2)
+                cv2.line(frame, chin_line[0], chin_line[1], (0, 255, 0), 5)
             # face_landmarks['nose_bridge']
             # face_landmarks['nose_tip']
         cv2.imshow('frame', frame)
