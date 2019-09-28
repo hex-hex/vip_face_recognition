@@ -12,13 +12,14 @@ def draw_multiline_line(img, point_list, color, thickness):
 
 def main():
     inv_param = np.linalg.inv(np.array([(i, i ** 2, i ** 3, i ** 4, 1) for i in range(0, 17, 4)]))
-    param = inv_param.dot(np.array((0, 0.1, 0.02, 0.1, 0)))
+    param = inv_param.dot(np.array((0, 0.05, 0.01, 0.05, 0)))
     beautify_param = np.array([(i, i ** 2, i ** 3, i ** 4, 1) for i in range(0, 17)]).dot(param)
     beautify_param = np.tile(beautify_param, (2, 1)).transpose()
     cv2.namedWindow("frame")
     cap = cv2.VideoCapture(0)
     while True:
         ret, frame = cap.read()
+        frame = cv2.flip(frame, 1)
         input_img = frame.copy() / 255.0
         height, width, depth = frame.shape
         src = np.array(
@@ -29,14 +30,17 @@ def main():
         transform = PiecewiseAffineTransform()
         for face_landmarks in face_landmarks_list:
             chin = face_landmarks['chin']
+            nose_bridge = face_landmarks['nose_bridge']
 
-            draw_multiline_line(frame, chin, (0, 255, 0), 2)
-            draw_multiline_line(input_img, chin, (0, 1.0, 0), 2)
+            # draw_multiline_line(frame, chin, (0, 255, 0), 2)
+            # draw_multiline_line(input_img, chin, (0, 1.0, 0), 2)
             src = np.vstack([src, np.array(chin)])
+            src = np.vstack([src, np.array(nose_bridge)])
 
             nose_point = face_landmarks['nose_bridge'][-1]
             dst = np.vstack(
                 [dst, (np.array(chin) - np.tile(np.array(nose_point), (17, 1))) * beautify_param + np.array(chin)])
+            dst = np.vstack([dst, np.array(nose_bridge)])
 
             # draw_multiline_line(frame,nose_bridge,(255,0,0),5)
             # nose_tip = face_landmarks['nose_tip']
