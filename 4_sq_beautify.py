@@ -10,6 +10,11 @@ def draw_multiline_line(img, point_list, color, thickness):
         cv2.line(img, line[0], line[1], color, thickness)
 
 
+def draw_points(img, point_list, color, radius):
+    for point in point_list:
+        cv2.circle(img, point, radius, color, radius)
+
+
 def main():
     inv_param = np.linalg.inv(np.array([(i, i ** 2, i ** 3, i ** 4, 1) for i in range(0, 17, 4)]))
     param = inv_param.dot(np.array((0, 0.05, 0.01, 0.05, 0)))
