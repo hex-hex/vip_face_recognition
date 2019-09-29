@@ -17,15 +17,15 @@ def draw_points(img, point_list, color, radius):
 
 def main():
     inv_param = np.linalg.inv(np.array([(i, i ** 2, i ** 3, i ** 4, 1) for i in range(0, 17, 4)]))
-    param = []
     beautify_param = []
 
     for i in range(10):
         scale_1 = i * 0.05
         scale_2 = i * 0.01
-        param.append(inv_param.dot(np.array((0, scale_1, scale_2, scale_1, 0))))
-        beautify_param.append(np.array([(i, i ** 2, i ** 3, i ** 4, 1) for i in range(0, 17)]).dot(param[0]))
-        beautify_param.append(np.tile(beautify_param, (2, 1)).transpose())
+        current_param = inv_param.dot(np.array((0, scale_1, scale_2, scale_1, 0)))
+        b_param = np.array([(i, i ** 2, i ** 3, i ** 4, 1) for i in range(0, 17)]).dot(current_param)
+        b_param = np.tile(b_param, (2, 1)).transpose()
+        beautify_param.append(b_param)
 
     cv2.namedWindow("frame")
     cap = cv2.VideoCapture(0)
@@ -40,9 +40,9 @@ def main():
         transform = []
         dst = []
         for i in range(10):
-            transform[i] = PiecewiseAffineTransform()
-            dst[i] = np.array(
-                ((0, 0), (width / 2, 0), (width - 1, 0), (0, height / 2), (0, height - 1), (width - 1, height - 1)))
+            transform.append(PiecewiseAffineTransform())
+            dst.append(np.array(
+                ((0, 0), (width / 2, 0), (width - 1, 0), (0, height / 2), (0, height - 1), (width - 1, height - 1))))
         for face_landmarks in face_landmarks_list:
             chin = face_landmarks['chin']
             nose_bridge = face_landmarks['nose_bridge']
@@ -67,10 +67,17 @@ def main():
             transform[i].estimate(src, dst[i])
             out_img.append(warp(frame, transform[i]))
 
-        cv2.imshow('frame', np.vstack(out_img))
-
+        result = np.vstack([np.hstack([out_img[0], out_img[1]]),
+                            np.hstack([out_img[2], out_img[3]]),
+                            np.hstack([out_img[4], out_img[5]]),
+                            np.hstack([out_img[6], out_img[7]]),
+                            np.hstack([out_img[8], out_img[9]])]) * 255
+        result = np.uint8(result)
+        cv2.imshow('frame', result)
+        cv2.imwrite('result.png', result)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
     cap.release()
     cv2.destroyAllWindows()
 

@@ -17,7 +17,7 @@ def draw_points(img, point_list, color, radius):
 
 def main():
     inv_param = np.linalg.inv(np.array([(i, i ** 2, i ** 3, i ** 4, 1) for i in range(0, 17, 4)]))
-    param = inv_param.dot(np.array((0, 0.05, 0.01, 0.05, 0)))
+    param = inv_param.dot(np.array((0, 0.04, 0.01, 0.04, 0)))
     beautify_param = np.array([(i, i ** 2, i ** 3, i ** 4, 1) for i in range(0, 17)]).dot(param)
     beautify_param = np.tile(beautify_param, (2, 1)).transpose()
     cv2.namedWindow("frame")
@@ -52,7 +52,9 @@ def main():
             # draw_multiline_line(frame,nose_tip,(0,0,255),5)
         transform.estimate(src, dst)
         out_img = warp(frame, transform)
-        cv2.imshow('frame', np.hstack([input_img, out_img]))
+        result = np.hstack([input_img, out_img])
+        cv2.imshow('frame', result)
+        cv2.imwrite('beauty.png', result)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     cap.release()
