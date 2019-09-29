@@ -8,6 +8,11 @@ def draw_multiline_line(img, point_list, color, thickness):
         cv2.line(img, line[0], line[1], color, thickness)
 
 
+def draw_points(img, point_list, color, radius):
+    for point in point_list:
+        cv2.circle(img, point, radius, color, radius+2)
+
+
 def main():
     cv2.namedWindow("frame")
     cap = cv2.VideoCapture(0)
@@ -16,13 +21,13 @@ def main():
         face_landmarks_list = face_recognition.face_landmarks(frame)
         for face_landmarks in face_landmarks_list:
             chin = face_landmarks['chin']
-            draw_multiline_line(frame, chin, (0, 255, 0), 5)
+            draw_points(frame, chin, (0, 255, 0), 2)
 
-            nose_bridge = face_landmarks['nose_bridge']
-            draw_multiline_line(frame, nose_bridge, (255, 0, 0), 5)
-
-            nose_tip = face_landmarks['nose_tip']
-            draw_multiline_line(frame, nose_tip, (0, 0, 255), 5)
+            # nose_bridge = face_landmarks['nose_bridge']
+            # draw_multiline_line(frame, nose_bridge, (255, 0, 0), 5)
+            #
+            # nose_tip = face_landmarks['nose_tip']
+            # draw_multiline_line(frame, nose_tip, (0, 0, 255), 5)
 
         cv2.imshow('frame', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
